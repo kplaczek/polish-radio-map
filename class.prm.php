@@ -15,9 +15,9 @@ class prm {
         $rawRegions = $this->getRegions();
         $parsedData = $this->parseCities($rawRegions);
         $superDetailData = $this->getDetailedInfo($parsedData);
-        echo '<pre>';
-        print_r($superDetailData);
-        echo '</pre>';
+        
+        //save to database for later 
+        $this->db->saveData($superDetailData);
     }
 
     private function getRegions() {
