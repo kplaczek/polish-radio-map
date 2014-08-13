@@ -2,7 +2,6 @@
 
 class getdata
 {
-
     public static function mc($data, $nobody=false, $options = array(), $oneoptions = array())
     {
         $curls = array();
