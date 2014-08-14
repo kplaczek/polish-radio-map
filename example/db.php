@@ -28,16 +28,24 @@ class db {
     }
 
     public function saveData($data) {
-        $massQuery = [];
+        $massQuery = '';
 
         foreach ($data['transmitter'] as $typeId => $typeElement) {
-            $massQuery[] = 'INSERT INTO transmitter (id, name, lat, lng, region, transmitter_id) VALUES (NULL, "' . $typeElement['name'] . '", ' . $typeElement['lat'] . ', ' . $typeElement['lng'] . ', "' . $typeElement['region'] . '", ' . $typeId . ')';
+            $massQuery = 'INSERT INTO transmitter (name, lat, lng, region, transmitter_id) VALUES ("' . $typeElement['name'] . '", ' . $typeElement['lat'] . ', ' . $typeElement['lng'] . ', "' . $typeElement['region'] . '", ' . $typeId . ');';
+            $this->connection->exec($massQuery);
+            foreach ($typeElement['stations']['transmitters'] as $radio) {
+                $massQuery = 'INSERT INTO transmitter_radio (name, frequency, transmitter_id, url) VALUES ("' . $radio['station'] . '", ' . (float) $radio['frequency_or_channel'] . ', ' . $typeId . ', "' . $radio['station_url'] . '");';
+                $this->connection->exec($massQuery);
+            }
         }
         foreach ($data['city'] as $typeId => $typeElement) {
-            $massQuery[] = 'INSERT INTO transmitter (id, name, lat, lng, region, transmitter_id) VALUES (NULL, "' . $typeElement['name'] . '", ' . $typeElement['lat'] . ', ' . $typeElement['lng'] . ', "' . $typeElement['region'] . '", ' . $typeId . ')';
+            $massQuery = 'INSERT INTO city (name, lat, lng, region, city_id) VALUES ("' . $typeElement['name'] . '", ' . $typeElement['lat'] . ', ' . $typeElement['lng'] . ', "' . $typeElement['region'] . '", ' . $typeId . ');';
+            $this->connection->exec($massQuery);
+            foreach ($typeElement['stations']['transmitters'] as $radio) {
+                $massQuery = 'INSERT INTO city_radio (name, frequency, city_id, url) VALUES ("' . $radio['station'] . '", ' . (float) $radio['frequency_or_channel'] . ', ' . $typeId . ', "' . $radio['station_url'] . '");';
+                $this->connection->exec($massQuery);
+            }
         }
-        echo $this->connection->exec(implode(';', $massQuery));
-        
     }
 
 }

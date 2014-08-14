@@ -12,7 +12,22 @@ CREATE TABLE IF NOT EXISTS `city` (
   `city_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `city_id` (`city_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `city_radio`
+--
+
+CREATE TABLE IF NOT EXISTS `city_radio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `frequency` decimal(4,1) NOT NULL,
+  `city_id` int(11) NOT NULL,
+  `url` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
 
@@ -42,4 +57,19 @@ CREATE TABLE IF NOT EXISTS `transmitter` (
   `transmitter_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `transmitter_id` (`transmitter_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transmitter_radio`
+--
+
+CREATE TABLE IF NOT EXISTS `transmitter_radio` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` text CHARACTER SET utf8 COLLATE utf8_polish_ci NOT NULL,
+  `frequency` decimal(4,1) NOT NULL,
+  `transmitter_id` int(11) NOT NULL,
+  `url` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
