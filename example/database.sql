@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `city_radio` (
   `frequency` decimal(4,1) NOT NULL,
   `city_id` int(11) NOT NULL,
   `url` text COLLATE utf8_bin NOT NULL,
+  `radio_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -71,5 +72,6 @@ CREATE TABLE IF NOT EXISTS `transmitter_radio` (
   `frequency` decimal(4,1) NOT NULL,
   `transmitter_id` int(11) NOT NULL,
   `url` text COLLATE utf8_bin NOT NULL,
+  `radio_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
