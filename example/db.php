@@ -27,7 +27,20 @@ class db {
         return $stmt->fetchAll(self::FETCH_TYPE);
     }
 
+    /**
+     * remove data from tables except region table. we need list of regions and they will stay the same for quite a while
+     */
+    public function truncateData(){
+        $this->connection->exec('TRUNCATE transmitter');
+        $this->connection->exec('TRUNCATE transmitter_radio');
+        $this->connection->exec('TRUNCATE city');
+        $this->connection->exec('TRUNCATE city_radio');
+    }
+    
+    
     public function saveData($data) {
+        $this->truncateData();
+        
         $massQuery = '';
 
         foreach ($data['transmitter'] as $typeId => $typeElement) {

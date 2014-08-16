@@ -43,6 +43,28 @@ CREATE TABLE IF NOT EXISTS `region` (
   PRIMARY KEY (`id`,`code`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
+--
+-- Dumping data for table `region`
+--
+
+INSERT INTO `region` (`id`, `code`, `name`) VALUES
+(1, 'LD', 'łódzkie'),
+(2, 'LB', 'lubuskie'),
+(3, 'WM', 'warmińsko-mazurskie'),
+(4, 'SL', 'śląskie'),
+(5, 'SW', 'świętokrzyskie'),
+(6, 'LU', 'lubelskie'),
+(7, 'KP', 'kujawsko-pomorskie'),
+(8, 'MP', 'małopolskie'),
+(9, 'PD', 'podlaskie'),
+(10, 'PK', 'podkarpackie'),
+(11, 'WP', 'wielkopolskie'),
+(12, 'MA', 'mazowieckie'),
+(13, 'PM', 'pomorskie'),
+(14, 'ZP', 'zachodniopomorskie'),
+(15, 'DS', 'dolnośląskie'),
+(16, 'OP', 'opolskie');
+
 -- --------------------------------------------------------
 
 --
