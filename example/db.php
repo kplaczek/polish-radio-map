@@ -30,17 +30,16 @@ class db {
     /**
      * remove data from tables except region table. we need list of regions and they will stay the same for quite a while
      */
-    public function truncateData(){
+    public function truncateData() {
         $this->connection->exec('TRUNCATE transmitter');
         $this->connection->exec('TRUNCATE transmitter_radio');
         $this->connection->exec('TRUNCATE city');
         $this->connection->exec('TRUNCATE city_radio');
     }
-    
-    
+
     public function saveData($data) {
         $this->truncateData();
-        
+
         $massQuery = '';
 
         foreach ($data['transmitter'] as $typeId => $typeElement) {
@@ -61,15 +60,44 @@ class db {
         }
     }
 
+    public function closestRadioStations($lat, $lng) {
+        $query = 'SELECT tr.*, acos(sin(radians(lat))*sin(radians(:lat))+cos(RADIANS(lat))*cos(radians(:lat))*cos(RADIANS(lng-:lng)))*6371 as distance 
+    FROM transmitter t
+    LEFT JOIN transmitter_radio tr ON t.transmitter_id = tr.transmitter_id 
+    WHERE acos(sin(radians(lat))*sin(radians(:lat))+cos(RADIANS(lat))*cos(radians(:lat))*cos(RADIANS(lng-:lng)))*6371 < :distance
+    ORDER BY distance asc';
+        $stmt = $this->connection->prepare($query);
+        $stmt->bindValue(':lat', $lat);
+        $stmt->bindValue(':lng', $lng);
+        $distance = 100;
+        $stmt->bindValue(':distance', $distance);
+        $stmt->execute();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+        $newData = array();
+        foreach ($data as $dat) {
+            if (!isset($newData[$dat['radio_id']])) {
+                $newData[$dat['radio_id']] = array('name' => $dat['name'], 'frequency' => $dat['frequency']);
+            }
+        }
+        
+        usort($newData, function($a, $b) {
+            return ($a['frequency'] > $b['frequency']) ? 1 : 0;
+        });
+
+        return $newData;
+    }
+
     /**
      * return closest transmitters from database to given lat and lng coordinates 
      * 
      * 
      * @param float $lat
      * @param float $lng
-     * @return  json string
+     * @return  array 
      */
-    public function closestCities($lat, $lng) {
+    public function closestTransmitters($lat, $lng) {
         $query = 'SELECT *, acos(sin(radians(lat))*sin(radians(:lat))+cos(RADIANS(lat))*cos(radians(:lat))*cos(RADIANS(lng-:lng)))*6371 as distance 
     FROM transmitter 
     WHERE acos(sin(radians(lat))*sin(radians(:lat))+cos(RADIANS(lat))*cos(radians(:lat))*cos(RADIANS(lng-:lng)))*6371 < :distance
@@ -80,7 +108,7 @@ class db {
         $distance = 100;
         $stmt->bindValue(':distance', $distance);
         $stmt->execute();
-        return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

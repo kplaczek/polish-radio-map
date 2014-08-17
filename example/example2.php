@@ -46,12 +46,17 @@
                 }).done(function(data) {
                     deleteOverlays();
                     deleteOverlays();
-                    for (i in data)
+                    $('#stations').html('')
+                    for (i in data[1]){
+                        $('<li>').html(data[1][i].frequency + ' - '+data[1][i].name).appendTo('#stations');
+                    }
+
+                    for (i in data[0])
                     {
                         infowindow = new google.maps.InfoWindow({
-                            content: '<div style="width: 350px; height: 100px;" class="data"> Name: ' + data[i].name + '<br>Lat: ' + data[i].lat + '<br>Lng: ' + data[i].lng + '<br>Region: ' + data[i].region + '<br>Distance: ' + parseFloat(data[i].distance).toFixed(3) + 'km</div>'
+                            content: '<div style="width: 350px; height: 100px;" class="data"> Name: ' + data[0][i].name + '<br>Lat: ' + data[0][i].lat + '<br>Lng: ' + data[0][i].lng + '<br>Region: ' + data[0][i].region + '<br>Distance: ' + parseFloat(data[0][i].distance).toFixed(3) + 'km</div>'
                         });
-                        locationMarker = new google.maps.LatLng(data[i].lat, data[i].lng);
+                        locationMarker = new google.maps.LatLng(data[0][i].lat, data[0][i].lng);
                         infowindowArray.push(infowindow);
                         marker = new google.maps.Marker({
                             position: locationMarker,
@@ -87,9 +92,13 @@
         <style>
             html,body { height:100%; margin: 0; padding: 0;}
             #map {width: 100%; height: 100%;}
+            #infoBox {font-size: 10pt; font-family: verdana, sans-serif; overflow: auto;  background: none repeat scroll 0 0 white; bottom: 0; display: block; height: 200px; left: 0; position: fixed; width: 450px; z-index: 10000;}
         </style>
     </head>
     <body>
+        <div id="infoBox">
+            <ul id="stations"></ul>
+        </div>
         <div id="map"></div>
     </body>
 </html>

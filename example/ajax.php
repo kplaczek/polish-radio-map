@@ -5,4 +5,9 @@
 
 include_once 'db.php';
 $db = new db();
-echo $db->closestCities($_POST['lat'], $_POST['lng']);
+$transmitters =  $db->closestTransmitters($_POST['lat'], $_POST['lng']);
+
+$stations = $db->closestRadioStations($_POST['lat'], $_POST['lng']);
+
+echo json_encode(array($transmitters, $stations));
+
